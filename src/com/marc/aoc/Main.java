@@ -1,13 +1,12 @@
 package com.marc.aoc;
 
-import com.marc.aoc.day.Day;
-import com.marc.aoc.day.Day01;
-import com.marc.aoc.day.Day02;
-import com.marc.aoc.day.Day03;
+import com.marc.aoc.day.*;
 
 public class Main {
+
     public static void main(String[] args) {
-        Day day = new Day03(false);
-        day.runBoth();
+        Day day = new Day04();
+        boolean testing = false;
+        DayRunner.run(day, testing);
     }
 }

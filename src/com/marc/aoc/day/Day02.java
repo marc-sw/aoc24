@@ -3,13 +3,9 @@ package com.marc.aoc.day;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Day02 extends Day {
+public class Day02 implements Day {
 
     private List<List<Integer>> reports;
-
-    public Day02(boolean test) {
-        super(2, test);
-    }
 
     private boolean isSaveReport(List<Integer> report) {
         int offset = report.get(1) - report.get(0);
@@ -35,7 +31,12 @@ public class Day02 extends Day {
     }
 
     @Override
-    protected void setupTextInput(String textInput) {
+    public int getNumber() {
+        return 2;
+    }
+
+    @Override
+    public void setup(String textInput) {
         String[] lines = textInput.split(System.lineSeparator());
         String[] lineParts;
         reports = new ArrayList<>(lines.length);
@@ -51,7 +52,7 @@ public class Day02 extends Day {
     }
 
     @Override
-    protected int solvePartOne() {
+    public int solvePartOne() {
         int saveReportsCount = 0;
         for (List<Integer> report: reports) {
             if (isSaveReport(report)) {
@@ -62,7 +63,7 @@ public class Day02 extends Day {
     }
 
     @Override
-    protected int solvePartTwo() {
+    public int solvePartTwo() {
         int saveReportsCount = 0;
         for (List<Integer> report: reports) {
             if (isSaveReport(report)) {

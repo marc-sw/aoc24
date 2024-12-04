@@ -4,19 +4,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Day01 extends Day {
+public class Day01 implements Day {
 
     private List<Integer> sortedLeft;
     private List<Integer> sortedRight;
 
-    public Day01(boolean test) {
-        super(1, test);
+    @Override
+    public int getNumber() {
+        return 1;
     }
 
     @Override
-    protected void setupTextInput(String textInput) {
+    public void setup(String puzzleInput) {
         String[] lineParts;
-        String[] lines = textInput.split(System.lineSeparator());
+        String[] lines = puzzleInput.split(System.lineSeparator());
         sortedLeft = new ArrayList<>(lines.length);
         sortedRight = new ArrayList<>(lines.length);
         for (String line: lines) {
@@ -31,7 +32,7 @@ public class Day01 extends Day {
     }
 
     @Override
-    protected int solvePartOne() {
+    public int solvePartOne() {
         int totalDistance = 0;
         for (int i = 0; i < sortedLeft.size(); i++) {
             totalDistance += Math.abs(sortedLeft.get(i) - sortedRight.get(i));
@@ -40,7 +41,7 @@ public class Day01 extends Day {
     }
 
     @Override
-    protected int solvePartTwo() {
+    public int solvePartTwo() {
         int leftCount;
         int rightCount;
         int number;
