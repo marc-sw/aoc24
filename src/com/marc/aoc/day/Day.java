@@ -3,9 +3,9 @@ package com.marc.aoc.day;
 
 public interface Day {
 
-    void setup(String puzzleInput);
-
     int getNumber();
+
+    void setup(String puzzleInput);
 
     int solvePartOne();
 
