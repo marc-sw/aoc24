@@ -32,7 +32,7 @@ public class Day01 implements Day {
     }
 
     @Override
-    public int solvePartOne() {
+    public long solvePartOne() {
         int totalDistance = 0;
         for (int i = 0; i < sortedLeft.size(); i++) {
             totalDistance += Math.abs(sortedLeft.get(i) - sortedRight.get(i));
@@ -41,7 +41,7 @@ public class Day01 implements Day {
     }
 
     @Override
-    public int solvePartTwo() {
+    public long solvePartTwo() {
         int leftCount;
         int rightCount;
         int number;

@@ -52,7 +52,7 @@ public class Day02 implements Day {
     }
 
     @Override
-    public int solvePartOne() {
+    public long solvePartOne() {
         int saveReportsCount = 0;
         for (List<Integer> report: reports) {
             if (isSaveReport(report)) {
@@ -63,7 +63,7 @@ public class Day02 implements Day {
     }
 
     @Override
-    public int solvePartTwo() {
+    public long solvePartTwo() {
         int saveReportsCount = 0;
         for (List<Integer> report: reports) {
             if (isSaveReport(report)) {

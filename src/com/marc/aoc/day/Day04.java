@@ -73,7 +73,7 @@ public class Day04 implements Day {
     }
 
     @Override
-    public int solvePartOne() {
+    public long solvePartOne() {
         int totalXmas = 0;
         for (int row = 0; row < charGrid.length; row++) {
             for (int column = 0; column < charGrid[row].length; column++) {
@@ -84,7 +84,7 @@ public class Day04 implements Day {
     }
 
     @Override
-    public int solvePartTwo() {
+    public long solvePartTwo() {
         int totalXmas = 0;
         for (int row = 0; row < charGrid.length; row++) {
             for (int column = 0; column < charGrid[row].length; column++) {

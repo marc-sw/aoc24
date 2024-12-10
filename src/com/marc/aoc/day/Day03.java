@@ -26,7 +26,7 @@ public class Day03 implements Day {
     }
 
     @Override
-    public int solvePartOne() {
+    public long solvePartOne() {
         Pattern pattern = Pattern.compile("mul\\([0-9]{1,3},[0-9]{1,3}\\)");
         Matcher matcher = pattern.matcher(puzzleInput);
         String expression;
@@ -41,7 +41,7 @@ public class Day03 implements Day {
     }
 
     @Override
-    public int solvePartTwo() {
+    public long solvePartTwo() {
         Pattern pattern = Pattern.compile("mul\\([0-9]{1,3},[0-9]{1,3}\\)");
         Matcher matcher = pattern.matcher(puzzleInput);
         int doCache;

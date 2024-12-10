@@ -84,7 +84,7 @@ public class Day05 implements Day {
     }
 
     @Override
-    public int solvePartOne() {
+    public long solvePartOne() {
         int solution = 0;
         for (List<Integer> update: updates) {
             if (isInOrder(update)) {
@@ -95,7 +95,7 @@ public class Day05 implements Day {
     }
 
     @Override
-    public int solvePartTwo() {
+    public long solvePartTwo() {
         int solution = 0;
         for (List<Integer> update: updates) {
             if (!isInOrder(update)) {

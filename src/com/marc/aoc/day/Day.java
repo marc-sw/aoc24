@@ -7,7 +7,7 @@ public interface Day {
 
     void setup(String puzzleInput);
 
-    int solvePartOne();
+    long solvePartOne();
 
-    int solvePartTwo();
+    long solvePartTwo();
 }
