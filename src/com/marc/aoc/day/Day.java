@@ -1,13 +1,15 @@
 package com.marc.aoc.day;
 
 
-public interface Day {
+import com.marc.aoc.deserializer.Deserializer;
 
-    int getNumber();
+public interface Day<T> {
 
-    void setup(String puzzleInput);
+    int day();
 
-    long solvePartOne();
+    Deserializer<T> deserializer();
 
-    long solvePartTwo();
+    long partOne(T input);
+
+    long partTwo(T input);
 }

@@ -8,9 +8,10 @@ import java.nio.file.Paths;
 public class InputSupplier {
 
     public static String supply(int day, boolean test) {
-        String dir = test ? "test": "main";
+        String dir = test ? "test": "input";
         Path path = Paths.get("resources", dir, String.format("%02d.txt", day));
         if (!path.toFile().exists()) {
+            System.out.println(path);
             throw new RuntimeException("no %s data file found for day %d, check if the file exists".formatted(dir, day));
         }
         try {

@@ -1,52 +1,14 @@
 package com.marc.aoc.day;
 
+import com.marc.aoc.common.Pair;
+import com.marc.aoc.deserializer.Deserializer;
+import com.marc.aoc.deserializer.LinesToPairListListIntAndMapIntSetInt;
+
 import java.util.*;
 
-public class Day05 implements Day {
+public class Day05 implements Day<Pair<List<List<Integer>>, Map<Integer, Set<Integer>>>> {
 
-    private List<List<Integer>> updates;
-    private Map<Integer, Set<Integer>> pageRules;
-
-    @Override
-    public int getNumber() {
-        return 5;
-    }
-
-    @Override
-    public void setup(String puzzleInput) {
-        String[] parts = puzzleInput.split(System.lineSeparator() + System.lineSeparator());
-        String[] ruleLines = parts[0].split(System.lineSeparator());
-        String[] ruleParts;
-        int first;
-        int second;
-        pageRules = new HashMap<>();
-
-        for (String line: ruleLines) {
-            ruleParts = line.split("\\|", 2);
-            first = Integer.parseInt(ruleParts[0]);
-            second = Integer.parseInt(ruleParts[1]);
-            if (!pageRules.containsKey(first)) {
-                pageRules.put(first, new HashSet<>());
-            }
-            pageRules.get(first).add(second);
-
-        }
-
-        String[] updateLines = parts[1].split(System.lineSeparator());
-        String[] updateParts;
-        List<Integer> update;
-        updates = new ArrayList<>(updateLines.length);
-        for (String line: updateLines) {
-            updateParts = line.split(",");
-            update = new ArrayList<>(updateParts.length);
-            for (String updatePart: updateParts) {
-                update.add(Integer.parseInt(updatePart));
-            }
-            updates.add(update);
-        }
-    }
-
-    private boolean isInOrder(List<Integer> update) {
+    private boolean isInOrder(List<Integer> update, Map<Integer, Set<Integer>> pageRules) {
         for (int i = 1; i < update.size(); i++) {
             for (int j = 0; j < i; j++) {
                 if (pageRules.containsKey(update.get(i)) && pageRules.get(update.get(i)).contains(update.get(j))) {
@@ -57,7 +19,7 @@ public class Day05 implements Day {
         return true;
     }
 
-    private void orderUpdate(List<Integer> update) {
+    private void orderUpdate(List<Integer> update, Map<Integer, Set<Integer>> pageRules) {
         int i = 0;
         int swapIndex;
         Integer current;
@@ -84,10 +46,20 @@ public class Day05 implements Day {
     }
 
     @Override
-    public long solvePartOne() {
+    public int day() {
+        return 5;
+    }
+
+    @Override
+    public Deserializer<Pair<List<List<Integer>>, Map<Integer, Set<Integer>>>> deserializer() {
+        return new LinesToPairListListIntAndMapIntSetInt();
+    }
+
+    @Override
+    public long partOne(Pair<List<List<Integer>>, Map<Integer, Set<Integer>>> input) {
         int solution = 0;
-        for (List<Integer> update: updates) {
-            if (isInOrder(update)) {
+        for (List<Integer> update: input.first) {
+            if (isInOrder(update, input.second)) {
                 solution += update.get(update.size() / 2);
             }
         }
@@ -95,11 +67,11 @@ public class Day05 implements Day {
     }
 
     @Override
-    public long solvePartTwo() {
+    public long partTwo(Pair<List<List<Integer>>, Map<Integer, Set<Integer>>> input) {
         int solution = 0;
-        for (List<Integer> update: updates) {
-            if (!isInOrder(update)) {
-                orderUpdate(update);
+        for (List<Integer> update: input.first) {
+            if (!isInOrder(update, input.second)) {
+                orderUpdate(update, input.second);
                 solution += update.get(update.size() / 2);
             }
         }

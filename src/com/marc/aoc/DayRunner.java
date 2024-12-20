@@ -1,33 +1,39 @@
 package com.marc.aoc;
 
+import com.marc.aoc.common.Pair;
 import com.marc.aoc.day.Day;
-import com.marc.aoc.day.Solution;
-import com.marc.aoc.deserialization.Deserializer;
+
+import java.util.function.Function;
 
 public class DayRunner {
 
-    public static void run(Day day, boolean testing) {
-        day.setup(InputSupplier.supply(day.getNumber(), testing));
-
-        String action = testing ? "Testing": "Running";
-
-        System.out.printf("%s Day %d Part 1\n", action, day.getNumber());
-        System.out.printf("Solution: %d\n", day.solvePartOne());
-        System.out.println();
-        System.out.printf("%s Day %d Part 2\n", action, day.getNumber());
-        System.out.printf("Solution: %d\n", day.solvePartTwo());
+    private static void display(Pair<Long, Long> resultTime) {
+        System.out.println("Result: " + resultTime.first);
+        System.out.println("Time: " + resultTime.second + "ms");
     }
 
-    public static <T> void run(Solution<T> solution, Deserializer<T> deserializer, boolean test) {
-        String puzzleInput = InputSupplier.supply(solution.getDay(), test);
-        T input = deserializer.deserialize(puzzleInput);
-        long result = solution.solve(input);
-        System.out.printf("%s Day %d Part %d\n", test ? "Testing" : "Running", solution.getDay(), solution.getPart());
-        if (test) {
-            System.out.printf("Expected: %d Actual: %d\n", solution.getTestSolution(), result);
-            System.out.println("Test " + (result == solution.getTestSolution() ? "successful": "failed"));
-        } else {
-            System.out.printf("Solution: %d", result);
-        }
+    public static <T> void first(Day<T> day, boolean testing) {
+        Pair<Long, Long> resultTime = timed(day::partOne, day.deserializer().deserialize(InputSupplier.supply(day.day(), testing)));
+        System.out.printf("Day %d Part 1\n", day.day());
+        display(resultTime);
+    }
+
+    public static <T> void second(Day<T> day, boolean testing) {
+        Pair<Long, Long> resultTime = timed(day::partTwo, day.deserializer().deserialize(InputSupplier.supply(day.day(), testing)));
+        System.out.printf("Day %d Part 2\n", day.day());
+        display(resultTime);
+    }
+
+    public static <T> void both(Day<T> day, boolean testing) {
+        first(day, testing);
+        System.out.println();
+        second(day, testing);
+    }
+
+    private static <T> Pair<Long, Long> timed(Function<T, Long> solution, T input) {
+        long start = System.currentTimeMillis();
+        long result = solution.apply(input);
+        long end = System.currentTimeMillis();
+        return new Pair<>(result, end - start);
     }
 }

@@ -1,21 +1,22 @@
 package com.marc.aoc.day;
 
 import com.marc.aoc.common.Direction;
+import com.marc.aoc.deserializer.Deserializer;
+import com.marc.aoc.deserializer.LinesToCharGrid;
 
-public class Day04 implements Day {
+public class Day04 implements Day<char[][]> {
 
     private static final char[] query = {'X', 'M', 'A', 'S'};
-    private char[][] charGrid;
 
-    private boolean isWithin(int x, int y) {
-        return  x >= 0 && y >= 0 && x < charGrid[0].length && y < charGrid.length;
+    private static boolean isOutside(int x, int y, int rows, int columns) {
+        return x < 0 || y < 0 || x >= columns || y >= rows;
     }
 
-    private boolean isCorrect(Direction direction, int x, int y) {
+    private static boolean isCorrect(Direction direction, int x, int y, char[][] charGrid) {
         for (int i = 1; i < query.length; i++) {
             x += direction.x;
             y += direction.y;
-            if (!isWithin(x, y)) {
+            if (isOutside(x, y, charGrid.length, charGrid[0].length)) {
                 return false;
             }
             if (charGrid[y][x] != query[i]) {
@@ -25,13 +26,13 @@ public class Day04 implements Day {
         return true;
     }
 
-    private int countXmas(int row, int col) {
+    private static int countXmas(int row, int col, char[][] charGrid) {
         int xmasCount = 0;
         if (charGrid[row][col] != query[0]) {
             return 0;
         }
         for (Direction direction: Direction.ALL) {
-            if (isCorrect(direction, col, row)) {
+            if (isCorrect(direction, col, row, charGrid)) {
                 xmasCount++;
             }
         }
@@ -39,11 +40,11 @@ public class Day04 implements Day {
         return xmasCount;
     }
 
-    private boolean isCrossMas(int row, int col) {
+    private static boolean isCrossMas(int row, int col, char[][] charGrid) {
         if (charGrid[row][col] != 'A') {
             return false;
         }
-        if (!isWithin(col + 1, row + 1) || !isWithin(col - 1, row - 1)) {
+        if (isOutside(col + 1, row + 1, charGrid.length, charGrid[0].length) || isOutside(col - 1, row - 1, charGrid.length, charGrid[0].length)) {
             return false;
         }
         char topLeft = charGrid[row + Direction.UP_LEFT.y][col + Direction.UP_LEFT.x];
@@ -55,40 +56,32 @@ public class Day04 implements Day {
     }
 
     @Override
-    public void setup(String puzzleInput) {
-        String[] lines = puzzleInput.split(System.lineSeparator());
-        int rows = lines.length;
-        int columns = lines[0].length();
-        charGrid = new char[rows][columns];
-        for (int row = 0; row < rows; row++) {
-            for (int column = 0; column < columns; column++) {
-                charGrid[row][column] = lines[row].charAt(column);
-            }
-        }
-    }
-
-    @Override
-    public int getNumber() {
+    public int day() {
         return 4;
     }
 
     @Override
-    public long solvePartOne() {
+    public Deserializer<char[][]> deserializer() {
+        return new LinesToCharGrid();
+    }
+
+    @Override
+    public long partOne(char[][] input) {
         int totalXmas = 0;
-        for (int row = 0; row < charGrid.length; row++) {
-            for (int column = 0; column < charGrid[row].length; column++) {
-                totalXmas += countXmas(row, column);
+        for (int row = 0; row < input.length; row++) {
+            for (int column = 0; column < input[row].length; column++) {
+                totalXmas += countXmas(row, column, input);
             }
         }
         return totalXmas;
     }
 
     @Override
-    public long solvePartTwo() {
+    public long partTwo(char[][] input) {
         int totalXmas = 0;
-        for (int row = 0; row < charGrid.length; row++) {
-            for (int column = 0; column < charGrid[row].length; column++) {
-                if (isCrossMas(row, column)) {
+        for (int row = 0; row < input.length; row++) {
+            for (int column = 0; column < input[row].length; column++) {
+                if (isCrossMas(row, column, input)) {
                     totalXmas++;
                 }
             }

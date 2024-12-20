@@ -1,18 +1,16 @@
 package com.marc.aoc.day;
 
-import com.marc.aoc.common.Bits;
+import com.marc.aoc.deserializer.Deserializer;
+import com.marc.aoc.deserializer.LinesToListListLong;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public class Day07 implements Day {
+public class Day07 implements Day<List<List<Long>>> {
 
     private static final BiFunction<Long, Long, Long> add = (x, y) -> x + y;
     private static final BiFunction<Long, Long, Long> multiply = (x, y) -> x * y;
     private static final BiFunction<Long, Long, Long> combine = (x, y) -> x * (long) Math.pow(10, (long) Math.log10(y) + 1) + y;
-
-    private List<List<Long>> equations;
 
     private static boolean solve(List<Long> equation, List<BiFunction<Long, Long, Long>> operators, int eqOffset, long actual) {
         if (actual > equation.get(0)) {
@@ -39,88 +37,26 @@ public class Day07 implements Day {
         return total;
     }
 
-    private void logEquations() {
-        for (List<Long> equation: equations) {
-            for (long val : equation) {
-                System.out.print(val + " ");
-            }
-            System.out.println();
-        }
-    }
-
-    private void logEquation(List<Long> equation, int combinations, int size) {
-        System.out.printf("%d = %d", equation.get(0), equation.get(1));
-        for (int i = 2; i < equation.size(); i++) {
-            if (Bits.getBit(combinations, i - 2, size)) {
-                System.out.print(" * ");
-            } else {
-                System.out.print(" + ");
-            }
-            System.out.print(equation.get(i));
-        }
-        System.out.println();
-    }
-
-    /**
-     *
-     * @param equation is the actual equation which has the expected solution at first index and the members after
-     * @param combinations is the current binary wise state
-     * @return = expected - actual
-     */
-    private long calculateDifference(List<Long> equation, int combinations, int size) {
-        long expected = equation.get(0);
-        long actual = equation.get(1);
-        for (int i = 2; i < equation.size() && actual <= expected; i++) {
-            if (Bits.getBit(combinations, i - 2, size)) {
-                actual *= equation.get(i);
-            } else {
-                actual += equation.get(i);
-            }
-        }
-        return expected - actual;
-    }
-
-    private boolean isTrue(List<Long> equation) {
-        int size = equation.size() - 2;
-        int combinations = 1 << size;
-        int combination = 0;
-        long difference;
-        do {
-            difference = calculateDifference(equation, combination, size);
-            combination++;
-        } while (difference != 0 && combination < combinations);
-        return difference == 0;
-    }
-
     @Override
-    public int getNumber() {
+    public int day() {
         return 7;
     }
 
     @Override
-    public void setup(String puzzleInput) {
-        String[] lines = puzzleInput.split(System.lineSeparator());
-        equations = new ArrayList<>(lines.length);
-        for (String line: lines) {
-            int colonIndex = line.indexOf(':');
-            long result = Long.parseLong(line.substring(0, colonIndex));
-            String[] members = line.substring(colonIndex + 2).split(" ");
-            List<Long> equation = new ArrayList<>(members.length + 1);
-            equation.add(result);
-            for (String member: members) {
-                equation.add(Long.parseLong(member));
-            }
-            equations.add(equation);
-        }
+    public Deserializer<List<List<Long>>> deserializer() {
+        return input -> {
+            input = input.replaceAll(":", "");
+            return new LinesToListListLong().deserialize(input);
+        };
     }
 
     @Override
-    public long solvePartOne() {
-        return sumCorrect(equations, List.of(add, multiply));
+    public long partOne(List<List<Long>> input) {
+        return sumCorrect(input, List.of(add, multiply));
     }
 
     @Override
-    public long solvePartTwo() {
-        return sumCorrect(equations, List.of(add, multiply, combine));
+    public long partTwo(List<List<Long>> input) {
+        return sumCorrect(input, List.of(add, multiply, combine));
     }
 }

@@ -13,6 +13,7 @@ public enum Direction {
 
 
     public static final Direction[] ALL;
+    public static final Direction[] BASIC;
     public final int x;
     public final int y;
 
@@ -23,10 +24,15 @@ public enum Direction {
 
     static {
         ALL = Direction.values();
+        BASIC = new Direction[]{UP, RIGHT, DOWN, LEFT};
     }
 
     public Direction turnRight() {
         return ALL[(this.ordinal() + 2) % ALL.length];
+    }
+
+    public Direction turnLeft() {
+        return ALL[(this.ordinal() + ALL.length - 2) % ALL.length];
     }
 
     public boolean isVertical() {

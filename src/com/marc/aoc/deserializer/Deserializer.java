@@ -1,4 +1,4 @@
-package com.marc.aoc.deserialization;
+package com.marc.aoc.deserializer;
 
 public interface Deserializer<T> {
 

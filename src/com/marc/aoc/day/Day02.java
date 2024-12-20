@@ -1,11 +1,12 @@
 package com.marc.aoc.day;
 
+import com.marc.aoc.deserializer.Deserializer;
+import com.marc.aoc.deserializer.LinesToListListInt;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Day02 implements Day {
-
-    private List<List<Integer>> reports;
+public class Day02 implements Day<List<List<Integer>>> {
 
     private boolean isSaveReport(List<Integer> report) {
         int offset = report.get(1) - report.get(0);
@@ -31,30 +32,19 @@ public class Day02 implements Day {
     }
 
     @Override
-    public int getNumber() {
+    public int day() {
         return 2;
     }
 
     @Override
-    public void setup(String textInput) {
-        String[] lines = textInput.split(System.lineSeparator());
-        String[] lineParts;
-        reports = new ArrayList<>(lines.length);
-        List<Integer> report;
-        for (String line : lines) {
-            lineParts = line.split(" ");
-            report = new ArrayList<>(lineParts.length);
-            for (String linePart : lineParts) {
-                report.add(Integer.parseInt(linePart));
-            }
-            reports.add(report);
-        }
+    public Deserializer<List<List<Integer>>> deserializer() {
+        return new LinesToListListInt(" ");
     }
 
     @Override
-    public long solvePartOne() {
+    public long partOne(List<List<Integer>> input) {
         int saveReportsCount = 0;
-        for (List<Integer> report: reports) {
+        for (List<Integer> report: input) {
             if (isSaveReport(report)) {
                 saveReportsCount++;
             }
@@ -63,19 +53,20 @@ public class Day02 implements Day {
     }
 
     @Override
-    public long solvePartTwo() {
+    public long partTwo(List<List<Integer>> input) {
         int saveReportsCount = 0;
-        for (List<Integer> report: reports) {
+        for (List<Integer> report: input) {
             if (isSaveReport(report)) {
                 saveReportsCount++;
                 continue;
             }
-            for (int i = 0; i < report.size(); i++) {
+            boolean save = false;
+            for (int i = 0; i < report.size() && !save; i++) {
                 List<Integer> copiedReport = new ArrayList<>(report);
                 copiedReport.remove(i);
                 if (isSaveReport(copiedReport)) {
                     saveReportsCount++;
-                    break;
+                    save = true;
                 }
             }
         }
